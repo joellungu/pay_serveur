@@ -1,5 +1,6 @@
 package org.acme.controllers;
 
+import org.acme.models.Boutique;
 import org.acme.models.Utilisateur;
 
 import javax.transaction.Transactional;
@@ -7,6 +8,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
+import java.util.List;
 
 @Path("utilisateur")
 public class UtilisateurController {
@@ -43,6 +45,14 @@ public class UtilisateurController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getUtilisateurs(){
         return Response.ok(Utilisateur.listAll()).build();
+    }
+
+    @GET
+    @Path("all/{codePromo}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getAllUtilisateurs(@PathParam("codePromo") String codePromo){
+        List<Utilisateur> liste = Utilisateur.list("codePromo",codePromo);
+        return Response.ok(liste).build();
     }
 
     @POST

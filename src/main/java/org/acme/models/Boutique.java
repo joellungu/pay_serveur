@@ -18,6 +18,8 @@ public class Boutique extends PanacheEntity {
     public String denomination;
     public String adresseEtablissement;
     public String RCCM;
+    public String idnat;
+    public String numeroImpot;
     public String provinceSiege;
     public String typeEtablissement;
     public String categorie;
@@ -25,6 +27,6 @@ public class Boutique extends PanacheEntity {
     public byte[] photo;
     public String codePromo;
     public String motDePasse;
-
+    public int status;
 
 }

@@ -8,6 +8,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
+import java.util.List;
 
 @Path("boutique")
 public class BoutiqueController {
@@ -30,13 +31,21 @@ public class BoutiqueController {
                                    @PathParam("motdepasse") String motdepasse){
         HashMap<String, Object> params = new HashMap<>();
         params.put("telephone",telephone);
-        params.put("motdepasse",motdepasse);
+        params.put("motDePasse",motdepasse);
+        System.out.println("Le telephone: "+telephone);
+        System.out.println("Le motDePasse: "+motdepasse);
 
-        Boutique boutique = Boutique.find("telephone =:telephone and motdepasse =:motdepasse ",params).firstResult();
+        Boutique boutique = Boutique.find("telephone =:telephone and motDePasse =:motDePasse ",params).firstResult();
+
         if(boutique == null){
             return Response.serverError().build();
+        }else if(boutique.status == 1){
+            System.out.println("Le status: "+boutique.status);
+            return Response.ok(boutique).build();
+        }else{
+            return Response.serverError().build();
         }
-        return Response.ok(boutique).build();
+
     }
 
     @GET
@@ -44,6 +53,14 @@ public class BoutiqueController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getUtilisateurs(){
         return Response.ok(Boutique.listAll()).build();
+    }
+
+    @GET
+    @Path("all/{codePromo}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getBoutiques(@PathParam("codePromo") String codePromo){
+        List<Boutique> liste = Boutique.list("codePromo",codePromo);
+        return Response.ok(liste).build();
     }
 
     @POST
@@ -93,6 +110,7 @@ public class BoutiqueController {
         boutique1.photo = boutique.photo;
         boutique1.codePromo = boutique.codePromo;
         boutique1.motDePasse = boutique.motDePasse;
+        boutique1.status = boutique.status;
         //
         return Response.ok(boutique1).build();
     }

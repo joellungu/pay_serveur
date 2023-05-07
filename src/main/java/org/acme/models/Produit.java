@@ -17,4 +17,6 @@ public class Produit extends PanacheEntity {
     public String unite;
     public String details;
     public byte[] photo;
+    public boolean valide;
+    public String date;
 }

@@ -1,5 +1,6 @@
 package org.acme.controllers;
 
+import org.acme.models.Boutique;
 import org.acme.models.Produit;
 import org.acme.models.Utilisateur;
 
@@ -8,6 +9,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
+import java.util.List;
 
 @Path("produit")
 public class ProduitController {
@@ -37,6 +39,20 @@ public class ProduitController {
             return Response.serverError().build();
         }
         return Response.ok(utilisater).build();
+    }
+
+    @GET
+    @Path("event")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getAllEvents(){
+
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("type","Evenement");
+        params.put("valide",true);
+        //
+        List<Produit> produits = Produit.find("type =:type and valide =:valide ",params).list();
+
+        return Response.ok(produits).build();
     }
 
     @GET
