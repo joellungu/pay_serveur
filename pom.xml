@@ -122,15 +122,15 @@
   </build>
   <profiles>
     <profile>
-      <id>native</id>
+      <id>uber-jar</id>
       <activation>
         <property>
-          <name>native</name>
+          <name>uber-jar</name>
         </property>
       </activation>
       <properties>
         <skipITs>false</skipITs>
-        <quarkus.package.type>native</quarkus.package.type>
+        <quarkus.package.type>uber-jar</quarkus.package.type>
       </properties>
     </profile>
   </profiles>
