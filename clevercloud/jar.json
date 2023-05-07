@@ -4,6 +4,6 @@
     "goal": "package"
   },
   "deploy": {
-    "jarName": "target/quarkus-app/code-with-quarkus-1-runner.jar"
+    "jarName": "target/code-with-quarkus-1.0.0-SNAPSHOT-runner.jar"
   }
 }

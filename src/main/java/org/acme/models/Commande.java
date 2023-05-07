@@ -2,6 +2,7 @@ package org.acme.models;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import java.util.HashMap;
@@ -19,5 +20,6 @@ public class Commande extends PanacheEntity {
     public double prix;
     public String devise;
     public String reference;
+
     public boolean deja;//Pour les evenements
 }

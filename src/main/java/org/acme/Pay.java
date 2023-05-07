@@ -11,6 +11,6 @@ public class Pay {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        return "Salut tata";
+        return "Hello from RESTEasy Reactive";
     }
 }
