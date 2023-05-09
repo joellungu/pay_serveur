@@ -8,7 +8,9 @@ import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 @Path("produit")
@@ -48,11 +50,25 @@ public class ProduitController {
 
         HashMap<String, Object> params = new HashMap<>();
         params.put("type","Evenement");
-        params.put("valide",true);
         //
-        List<Produit> produits = Produit.find("type =:type and valide =:valide ",params).list();
+        List<Produit> prs = new LinkedList<>();
+        List<Produit> produits = Produit.find("type =:type",params).list();
+        produits.forEach((p)->{
+            //
+            LocalDate localDate = LocalDate.now();
+            //
+            String[] d = p.date.split(" ");
+            String[] dateFin = d[1].split("-");
+            if(localDate.getYear() <= Integer.parseInt(dateFin[2])){
+                if(localDate.getMonthValue() <= Integer.parseInt(dateFin[1])){
+                    if(localDate.getDayOfMonth() <= Integer.parseInt(dateFin[0])){
+                        prs.add(p);
+                    }
+                }
+            }
 
-        return Response.ok(produits).build();
+        });
+        return Response.ok(prs).build();
     }
 
     @GET

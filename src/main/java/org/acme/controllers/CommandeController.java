@@ -1,5 +1,6 @@
 package org.acme.controllers;
 
+import org.acme.models.Boutique;
 import org.acme.models.Commande;
 import org.acme.models.Faq;
 
@@ -33,13 +34,14 @@ public class CommandeController {
     @GET
     @Path("entreprise/{idBoutique}/{date}")
     @Transactional
-    public List<Commande> allEntreprise(@PathParam("idBoutique") long idBoutique, @PathParam("date") String date){
+    public Response allEntreprise(@PathParam("idBoutique") long idBoutique, @PathParam("date") String date){
         HashMap params = new HashMap();
         params.put("idBoutique",idBoutique);
         params.put("date",date);
 
         List<Commande> liste = Commande.list("idBoutique =:idBoutique and date =:date",params);
-        return liste;
+        //List<Commande> liste = Commande.listAll();
+        return Response.ok(liste).build();
     }
 
     @GET
@@ -50,20 +52,31 @@ public class CommandeController {
         params.put("idUtilisateur",idUtilisateur);
         params.put("date",date);
 
-        List<Commande> liste = Commande.list("idBoutique =:idBoutique and date =:date",params);
+        List<Commande> liste = Commande.list("idUtilisateur =:idUtilisateur and date =:date",params);
         return liste;
     }
 
     @GET
-    @Path("journalier/{idBoutique}/{date}")
+    @Path("/{idcommande}")
     @Transactional
-    public List<Commande> allJournalier(@PathParam("idBoutique") long idBoutique, @PathParam("date") String date){
-        HashMap params = new HashMap();
-        params.put("idBoutique",idBoutique);
-        params.put("date",date);
+    public Commande allJournalier(@PathParam("idcommande") long idcommande){
+
+        return Commande.findById(idcommande);
+    }
+
+    @PUT
+    @Transactional
+    public Response updateUtilisateur(Commande commande) {
+        Commande commande1 = Commande.findById(commande.id);
+        if(commande1 == null){
+            return Response.serverError().build();
+        }
         //
-        List<Commande> liste = Commande.list("idBoutique =:idBoutique and date =:date",params);
-        return liste;
+        commande1.deja = commande.deja;
+        commande1.type = commande.type;
+        commande1.date = commande.date;
+        //
+        return Response.ok(commande1).build();
     }
 
 }

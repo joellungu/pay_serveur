@@ -17,7 +17,7 @@ public class Boutique extends PanacheEntity {
     public String adresse;
     public String denomination;
     public String adresseEtablissement;
-    public String RCCM;
+    public String rccm;
     public String idnat;
     public String numeroImpot;
     public String provinceSiege;

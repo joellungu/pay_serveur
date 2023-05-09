@@ -102,7 +102,7 @@ public class BoutiqueController {
         boutique1.adresse = boutique.adresse;
         boutique1.denomination = boutique.denomination;
         boutique1.adresseEtablissement = boutique.adresseEtablissement;
-        boutique1.RCCM = boutique.RCCM;
+        boutique1.rccm = boutique.rccm;
         boutique1.provinceSiege = boutique.provinceSiege;
         boutique1.typeEtablissement = boutique.typeEtablissement;
         boutique1.categorie = boutique.categorie;
