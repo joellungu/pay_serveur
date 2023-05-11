@@ -212,5 +212,4 @@ public class PaiementController {
             return montant + prct;
         }
     }
-
 }
