@@ -9,6 +9,8 @@ import java.util.List;
 @Entity
 public class Commande extends PanacheEntity {
     public long idBoutique;
+
+    @Column(name="Price", columnDefinition="Decimal(10,2) default '0.0'")
     public long idBusiness;
     public long idUtilisateur;
     public String date;
