@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 public class Produit extends PanacheEntity {
 
     public long idBoutique;
+    public long idBusiness;
     public String nom;
     public String type;
     public double prix;

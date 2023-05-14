@@ -1,6 +1,7 @@
 package org.acme.controllers;
 
 import org.acme.models.Boutique;
+import org.acme.models.Business;
 import org.acme.models.Utilisateur;
 
 import javax.transaction.Transactional;
@@ -37,13 +38,24 @@ public class BoutiqueController {
 
         Boutique boutique = Boutique.find("telephone =:telephone and motDePasse =:motDePasse ",params).firstResult();
 
-        if(boutique == null){
-            return Response.serverError().build();
-        }else if(boutique.status == 1){
-            System.out.println("Le status: "+boutique.status);
+        if(boutique != null){
             return Response.ok(boutique).build();
         }else{
-            return Response.serverError().build();
+            HashMap<String, Object> params2 = new HashMap<>();
+            String truc = telephone.replace("+243","");
+            String tel = telephone.replaceAll("/+243","");
+            params2.put("nomUtilisateur",truc);
+            params2.put("mdp",motdepasse);
+            System.out.println("Le telephone: "+tel+" :: "+truc);
+            System.out.println("Le motDePasse: "+motdepasse);
+
+            Business business = Business.find("nomUtilisateur =:nomUtilisateur and mdp =:mdp ",params2).firstResult();
+            if(business != null){
+                return Response.ok(business).build();
+            }else{
+                return Response.serverError().build();
+            }
+
         }
 
     }

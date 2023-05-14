@@ -75,6 +75,13 @@ public class ProduitController {
     @Path("all/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getUtilisateurs(@PathParam("id") long id){
+        return Response.ok(Produit.find("idBusiness",id).list()).build();
+    }
+
+    @GET
+    @Path("alls/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getUtilisateurss(@PathParam("id") long id){
         return Response.ok(Produit.find("idBoutique",id).list()).build();
     }
 

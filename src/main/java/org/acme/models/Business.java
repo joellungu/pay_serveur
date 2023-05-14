@@ -5,11 +5,12 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import javax.persistence.Entity;
 
 @Entity
-public class Utilisateur extends PanacheEntity {
+public class Business extends PanacheEntity {
+    public long idBoutique;
+    public String adresse;
     public String nomUtilisateur;
-    public String telephone;
-    public String email;
-    public String motdepasse;
-    public String codePromo;
+    public String nomBusiness;
+    public String mdp;
+    public int role;
     public byte[] photo;
 }

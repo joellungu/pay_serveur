@@ -3,6 +3,7 @@ package org.acme.controllers;
 import org.acme.models.Boutique;
 import org.acme.models.Commande;
 import org.acme.models.Faq;
+import org.acme.models.Produit;
 
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
@@ -28,6 +29,14 @@ public class CommandeController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response saveUtilisateur(Commande commande){
         commande.persist();
+        if(!commande.produits.isEmpty()){
+            commande.produits.forEach((p)->{
+                //
+                Produit produit = Produit.findById(p.get("id"));
+                produit.quantite = produit.quantite - Integer.parseInt(p.get("quantite")+"");
+                //
+            });
+        }
         return Response.ok(commande).build();
     }
 
@@ -36,10 +45,10 @@ public class CommandeController {
     @Transactional
     public Response allEntreprise(@PathParam("idBoutique") long idBoutique, @PathParam("date") String date){
         HashMap params = new HashMap();
-        params.put("idBoutique",idBoutique);
+        params.put("idBusiness",idBoutique);
         params.put("date",date);
 
-        List<Commande> liste = Commande.list("idBoutique =:idBoutique and date =:date",params);
+        List<Commande> liste = Commande.list("idBusiness =:idBusiness and date =:date",params);
         //List<Commande> liste = Commande.listAll();
         return Response.ok(liste).build();
     }

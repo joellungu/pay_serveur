@@ -9,6 +9,7 @@ import java.util.List;
 @Entity
 public class Commande extends PanacheEntity {
     public long idBoutique;
+    public long idBusiness;
     public long idUtilisateur;
     public String date;
     public int type;//1 pour commande normal et 2 pour evenement
