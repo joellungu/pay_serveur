@@ -42,14 +42,14 @@ public class BoutiqueController {
             return Response.ok(boutique).build();
         }else{
             HashMap<String, Object> params2 = new HashMap<>();
-            String truc = telephone.replace("+243","");
-            String tel = telephone.replaceAll("/+243","");
-            params2.put("nomUtilisateur",truc);
+            //String truc = telephone.replace("+243","");
+            //String tel = telephone.replaceAll("/+243","");
+            params2.put("telephone",telephone);
             params2.put("mdp",motdepasse);
-            System.out.println("Le telephone: "+tel+" :: "+truc);
+            System.out.println("Le telephone: "+telephone+" :: ");
             System.out.println("Le motDePasse: "+motdepasse);
 
-            Business business = Business.find("nomUtilisateur =:nomUtilisateur and mdp =:mdp ",params2).firstResult();
+            Business business = Business.find("telephone =:telephone and mdp =:mdp ",params2).firstResult();
             if(business != null){
                 return Response.ok(business).build();
             }else{

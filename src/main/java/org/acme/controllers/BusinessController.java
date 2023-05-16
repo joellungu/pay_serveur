@@ -62,6 +62,7 @@ public class BusinessController {
         business1.nomUtilisateur = business.nomUtilisateur;
         business1.mdp = business.mdp;
         business1.nomBusiness = business.nomBusiness;
+        business1.telephone = business.telephone;
         business1.role = business.role;
         business1.photo = business.photo;
         //
