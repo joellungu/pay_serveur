@@ -79,9 +79,9 @@ public class UtilisateurController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response saveUtilisateur(Utilisateur utilisateur){
         HashMap<String, Object> params = new HashMap<>();
-        params.put("telephone",utilisateur.telephone);
+        params.put("idUtilisateur",utilisateur.idUtilisateur);
 
-        Utilisateur utilisater = Utilisateur.find("telephone =:telephone ",params).firstResult();
+        Utilisateur utilisater = Utilisateur.find("idUtilisateur =:idUtilisateur ",params).firstResult();
         if(utilisater == null){
         utilisateur.persist();
             return Response.ok(utilisateur).build();
@@ -111,15 +111,13 @@ public class UtilisateurController {
             return Response.serverError().build();
         }
         //
-        utilisateur1.nomUtilisateur = utilisateur.nomUtilisateur;
-        utilisateur1.motdepasse = utilisateur.motdepasse;
-        utilisateur1.telephone = utilisateur.telephone;
-        utilisateur1.email = utilisateur.email;
-        utilisateur1.photo = utilisateur.photo;
+        utilisateur1.idUtilisateur = utilisateur.idUtilisateur;
+        utilisateur1.utilisateur = utilisateur.utilisateur;
         //
         return Response.ok(utilisateur1).build();
     }
 
+    /*
     @GET
     @Path("photo.png")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
@@ -127,6 +125,7 @@ public class UtilisateurController {
         Utilisateur utilisateur = Utilisateur.findById(id);
         return utilisateur.photo;
     }
+    */
 
     //
     public void sending(String too) throws Exception {
