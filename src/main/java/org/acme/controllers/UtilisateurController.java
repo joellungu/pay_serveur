@@ -79,14 +79,14 @@ public class UtilisateurController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response saveUtilisateur(Utilisateur utilisateur){
         HashMap<String, Object> params = new HashMap<>();
-        params.put("idUtilisateur",utilisateur.idUtilisateur);
+        params.put("email",utilisateur.email);
 
-        Utilisateur utilisater = Utilisateur.find("idUtilisateur =:idUtilisateur ",params).firstResult();
+        Utilisateur utilisater = Utilisateur.find("email =:email ",params).firstResult();
         if(utilisater == null){
         utilisateur.persist();
             return Response.ok(utilisateur).build();
         }else{
-            return Response.ok("Ce numero de téléphone a déjà un compte veuillez vous connecter.").build();
+            return Response.ok(utilisater).build();
         }
 
     }
