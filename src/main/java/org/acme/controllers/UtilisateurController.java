@@ -112,7 +112,9 @@ public class UtilisateurController {
         }
         //
         utilisateur1.idUtilisateur = utilisateur.idUtilisateur;
-        utilisateur1.utilisateur = utilisateur.utilisateur;
+        utilisateur1.nom = utilisateur.nom;
+        utilisateur1.email = utilisateur.email;
+        utilisateur1.photoURL = utilisateur.photoURL;
         //
         return Response.ok(utilisateur1).build();
     }

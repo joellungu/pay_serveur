@@ -8,5 +8,8 @@ import java.util.HashMap;
 @Entity
 public class Utilisateur extends PanacheEntity {
     public long idUtilisateur;
-    public HashMap utilisateur;
+    public String nom;
+    public String email;
+    public String photoURL;
+
 }
