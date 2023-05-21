@@ -86,6 +86,10 @@ public class UtilisateurController {
         utilisateur.persist();
             return Response.ok(utilisateur).build();
         }else{
+            utilisater.idUtilisateur = utilisateur.idUtilisateur;
+            utilisater.nom = utilisateur.nom;
+            utilisater.email = utilisateur.email;
+            utilisater.photoURL = utilisateur.photoURL;
             return Response.ok(utilisater).build();
         }
 
