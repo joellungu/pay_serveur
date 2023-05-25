@@ -11,5 +11,6 @@ public class Utilisateur extends PanacheEntity {
     public String nom;
     public String email;
     public String photoURL;
+    public String codePromo;
 
 }
