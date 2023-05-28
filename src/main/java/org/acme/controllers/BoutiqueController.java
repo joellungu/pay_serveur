@@ -80,8 +80,18 @@ public class BoutiqueController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response saveUtilisateur(Boutique boutique){
-        boutique.persist();
-        return Response.ok(boutique).build();
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("telephone",boutique.telephone);
+
+        Boutique utilisater = Boutique.find("telephone =:telephone ",params).firstResult();
+        if(utilisater == null){
+            boutique.persist();
+            return Response.ok(boutique).build();
+        }else{
+            return Response.serverError().build();
+        }
+
+
     }
 
     @DELETE
