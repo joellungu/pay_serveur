@@ -88,7 +88,7 @@ public class BoutiqueController {
             boutique.persist();
             return Response.ok(boutique).build();
         }else{
-            return Response.serverError().build();
+            return Response.status(405).entity("Ce numéro exist déjà veuillez-vous connecter.").build();
         }
 
 
