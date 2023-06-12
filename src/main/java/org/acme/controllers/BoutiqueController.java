@@ -133,6 +133,8 @@ public class BoutiqueController {
         boutique1.codePromo = boutique.codePromo;
         boutique1.motDePasse = boutique.motDePasse;
         boutique1.status = boutique.status;
+        boutique1.code = boutique.code;
+        boutique1.token = boutique.token;
         //
         return Response.ok(boutique1).build();
     }

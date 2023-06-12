@@ -28,5 +28,7 @@ public class Boutique extends PanacheEntity {
     public String codePromo;
     public String motDePasse;
     public int status;
+    public String code;
+    public String token;
 
 }

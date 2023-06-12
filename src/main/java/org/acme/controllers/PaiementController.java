@@ -1,6 +1,7 @@
 package org.acme.controllers;
 
 
+import org.acme.models.Boutique;
 import org.acme.models.Devise;
 import org.acme.models.Paiement;
 
@@ -8,6 +9,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
@@ -25,16 +27,16 @@ public class PaiementController {
     public PaiementController(){}
 
 
-    public String lancer(String devise, String telephone, Double m, String reference) {
+    public String lancer(String devise, String telephone, Double m, String reference, String code, String token) {
         System.out.println("la devise: $"+devise+" lE MONTANT: $"+m);
         String dev = devise.equals("USD") ? "USD":"CDF";
         double montant = conversion(m,1L, devise.equals("USD"));
         System.out.println("la devise: $"+dev+" lE MONTANT: $"+montant);
         String urlPost = "http://41.243.7.46:3006/api/rest/v1/paymentService";
         //////////////////http://41.243.7.46:3006/api/rest/v1/paymentService
-        //flexpay
+        //flexpay//PITUP
         String body = "{\n" +
-                "  \"merchant\":\"PITUP\"," +
+                "  \"merchant\":\""+code+"\"," +
                 "  \"type\":1," +
                 "  \"reference\": \""+reference+"\"," +
                 "  \"phone\": \""+telephone+"\"," +
@@ -45,7 +47,9 @@ public class PaiementController {
         var requete = HttpRequest.newBuilder()
                 .uri(URI.create(urlPost))
                 .header("Content-Type","application/json")
-                .header("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcL2xvZ2luIiwicm9sZXMiOlsiTUVSQ0hBTlQiXSwiZXhwIjoxNzQ1NTg3Nzc1LCJzdWIiOiI2OGQ5MTY2NzY0ZjFiZDMyYTVjZjBjZWJiN2I0NjMyYiJ9.4F57X9ybGSbPw2mxbMPjV8uo-yq56A0QixXYkuyeC60")
+                .header("Authorization", token
+                        //"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcL2xvZ2luIiwicm9sZXMiOlsiTUVSQ0hBTlQiXSwiZXhwIjoxNzQ1NTg3Nzc1LCJzdWIiOiI2OGQ5MTY2NzY0ZjFiZDMyYTVjZjBjZWJiN2I0NjMyYiJ9.4F57X9ybGSbPw2mxbMPjV8uo-yq56A0QixXYkuyeC60"
+                )
                 .POST(HttpRequest.BodyPublishers.ofString(body))
                 .build();
         var client = HttpClient.newHttpClient();
@@ -69,7 +73,7 @@ public class PaiementController {
     Timer timer;
 
     public void AnnoyingBeep() {
-        String reponse = lancer("","",1.0,"");
+        String reponse = lancer("","",1.0,"","","");
         System.out.println(reponse);
         //reponse = "{"+reponse+"}";
         System.out.println("{"+reponse+"}");
@@ -126,7 +130,7 @@ public class PaiementController {
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public String lancerPaiment(Paiement paiement) {
+    public Response lancerPaiment(Paiement paiement) {
         //
         System.out.println("Le montant: "+paiement.amount);
         System.out.println("Le devise: "+paiement.callbackurl);
@@ -135,9 +139,71 @@ public class PaiementController {
 
         paiement.persist();
         //AnnoyingBeep();
+        Boutique boutique = Boutique.findById(paiement.idBoutique);
+        if(boutique != null){
+            if(!boutique.code.equals(null) && !boutique.token.equals(null)){
+                String rep = lancer(paiement.currency,paiement.phone,paiement.amount,paiement.reference,
+                        boutique.code, boutique.token);
+                return Response.ok(rep).build();
+            }else {
+                return Response.status(405).entity("Cette boutique n'a pas encore été validé !").build();
+            }
+
+        }else{
+            return Response.status(405).entity("Cette boutique n'a pas encore été enregistré").build();
+        }
         //
-        return lancer(paiement.currency,paiement.phone,paiement.amount,paiement.reference);
+
     }
+
+    @Path("/verification/{orderNumber}/{idBoutique}")
+    @GET
+    @Transactional
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response verification(@PathParam("orderNumber") String orderNumber, @PathParam("idBoutique") Long idBoutique) {
+        //
+        System.out.println("orderNumber: "+orderNumber+" -- idBoutique: "+idBoutique);
+        //AnnoyingBeep();
+        Boutique boutique = Boutique.findById(idBoutique);
+        if(boutique != null){
+            if(!boutique.code.equals(null) && !boutique.token.equals(null)){
+                String urlPost = "http://41.243.7.46:3006/api/rest/v1/check/"+orderNumber;
+                //////////////////http://41.243.7.46:3006/flexpay_business/api/rest/v1/paymentService
+                //flexpay//PITUP
+                var requete = HttpRequest.newBuilder()
+                        .uri(URI.create(urlPost))
+                        .header("Content-Type","application/json")
+                        .header("Authorization", boutique.token
+                                //"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcL2xvZ2luIiwicm9sZXMiOlsiTUVSQ0hBTlQiXSwiZXhwIjoxNzQ1NTg3Nzc1LCJzdWIiOiI2OGQ5MTY2NzY0ZjFiZDMyYTVjZjBjZWJiN2I0NjMyYiJ9.4F57X9ybGSbPw2mxbMPjV8uo-yq56A0QixXYkuyeC60"
+                        )
+                        .GET()
+                        .build();
+                var client = HttpClient.newHttpClient();
+                try {
+                    var reponse = client.send(requete, HttpResponse.BodyHandlers.ofString());
+                    System.out.println(reponse.statusCode());
+                    System.out.println(reponse.body());
+                    return Response.ok(reponse.body()).build();
+                } catch (IOException e) {
+                    System.out.println(e);
+                    return Response.status(500).entity(""+e.getMessage()).build();
+                } catch (InterruptedException e) {
+                    System.out.println(e);
+                    return Response.status(500).entity(""+e.getMessage()).build();
+                }
+                //return Response.ok(rep).build();
+            }else {
+                return Response.status(405).entity("Cette boutique n'a pas encore été validé !").build();
+            }
+
+        }else{
+            return Response.status(405).entity("Cette boutique n'a pas encore été enregistré").build();
+        }
+        //
+
+    }
+
 
     @Path("/devise")
     @DELETE

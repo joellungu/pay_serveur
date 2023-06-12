@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 
 @Entity
 public class Paiement extends PanacheEntity {
-    public String merchant;
+    public Long idBoutique;
     public int typ;
     public long idUtilisateur;
 
