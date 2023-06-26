@@ -91,7 +91,6 @@ public class BoutiqueController {
             return Response.status(405).entity("Ce numéro exist déjà veuillez-vous connecter.").build();
         }
 
-
     }
 
     @DELETE

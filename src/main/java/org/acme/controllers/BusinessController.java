@@ -52,6 +52,8 @@ public class BusinessController {
 
     @PUT
     @Transactional
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response updateUtilisateur(Business business) {
         Business business1 = Business.findById(business.id);
         if(business1 == null){
